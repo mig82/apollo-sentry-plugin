@@ -1,6 +1,6 @@
 {
   "name": "apollo-sentry-plugin",
-  "version": "1.0.0-rc2",
+  "version": "1.0.0-rc3",
   "description": "A Sentry plugin for Apollo Server.",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
