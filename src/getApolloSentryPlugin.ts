@@ -2,6 +2,7 @@ import * as Sentry from "@sentry/node"
 import * as Tracing from "@sentry/tracing"
 import { TransactionContext } from "@sentry/types"
 import { ApolloServerPlugin, GraphQLRequestContext } from 'apollo-server-plugin-base'
+import { ApolloError } from 'apollo-server'
 
 import { initSentry } from "./initSentry"
 
@@ -13,35 +14,60 @@ export function getApolloSentryPlugin(name: String = 'Server', timeout: number =
 			console.log(`${name} starting up...`)
 			initSentry()
 		},
-	
-		async requestDidStart(requestContext: GraphQLRequestContext) {
-	
+
+		async requestDidStart(ctx: GraphQLRequestContext) {
+
 			const txContext: TransactionContext = {
-				op: requestContext.request.operationName,
-				name: requestContext.request.operationName || '',
-				data: requestContext.request.variables
+				op: ctx.request.operationName,
+				name: ctx.request.operationName || '',
+				data: ctx.request.variables
 			}
 			const transaction = Sentry.startTransaction(txContext)
 			// console.log('Request started!')
-	
+
 			return {
-				async willSendResponse(requestContext) {
+				async willSendResponse(ctx) {
 					transaction.finish()
 				},
-	
-				async didEncounterErrors(requestContext: GraphQLRequestContext){
+
+				async didEncounterErrors(ctx: GraphQLRequestContext) {
+
+					// Ignore if operation could not be resolved, including validation errors.
+					if (!ctx.operation) {
+						return;
+					}
 					// Iterate over the errors found and capture each.
-					requestContext.errors?.forEach(error => {
+					for (const error of ctx.errors || []){
 						console.error(error)
+
+						// Report internal server errors only.
+						if(error instanceof ApolloError){
+							// TODO: Use a feature flag to control whether to log all errors or not.
+							// continue
+						}
+
 						Sentry.configureScope(scope => {
-							scope.setExtra('resolver', requestContext.operationName)
-							scope.setExtra('variables', requestContext.request && requestContext.request.variables)
-							scope.setExtra('context', requestContext)
+							// Annotate whether failing operation was query/mutation/subscription
+							scope.setTag("kind", ctx.operation?.operation)
+
+							// Log query resolver and variables.
+							scope.setExtra('resolver', ctx.operationName)
+							scope.setExtra("query", ctx.request.query)
+							scope.setExtra('variables', ctx.request?.variables)
+							scope.setExtra('context', ctx)
+							if(error.path) {
+								// Add the path as breadcrumb
+								scope.addBreadcrumb({
+									category: "query-path",
+									message: error.path.join(" > "),
+									// level: Sentry.Severity.Debug
+								})
+							}
 						})
 
 						// TODO: Sentry complains that this is not a proper error. Must transform it into one.
 						Sentry.captureException(error)
-					})
+					}
 
 					await Sentry.flush(timeout)
 				}
