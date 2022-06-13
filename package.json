@@ -1,0 +1,34 @@
+{
+  "name": "apollo-sentry-plugin",
+  "version": "1.0.0",
+  "description": "A Sentry plugin for Apollo Server.",
+  "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mig82/apollo-sentry-plugin.git"
+  },
+  "keywords": [
+    "sentry",
+    "apollo-server",
+    "graphql"
+  ],
+  "author": "Miguelángel Fernández",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mig82/apollo-sentry-plugin/issues"
+  },
+  "homepage": "https://github.com/mig82/apollo-sentry-plugin#readme",
+  "devDependencies": {
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3"
+  },
+  "dependencies": {
+    "@sentry/node": "^7.1.1",
+    "apollo-server-plugin-base": "^3.6.0",
+    "dotenv": "^16.0.1"
+  }
+}
