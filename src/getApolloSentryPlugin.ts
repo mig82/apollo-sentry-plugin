@@ -43,7 +43,7 @@ export function getApolloSentryPlugin(name: String = 'Server', timeout: number =
 						// Report internal server errors only.
 						if(error instanceof ApolloError){
 							// TODO: Use a feature flag to control whether to log all errors or not.
-							// continue
+							continue
 						}
 
 						Sentry.configureScope(scope => {
