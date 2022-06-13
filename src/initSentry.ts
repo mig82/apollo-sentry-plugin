@@ -3,7 +3,7 @@ import {ApolloSentryPluginError} from './ApolloSentryPluginError'
 
 const defaultTracesSampleRate = 0.1
 
-function validateEnv(){
+export function validateEnv(){
 	if(typeof process.env.SENTRY_DSN == 'undefined') {
 		throw new ApolloSentryPluginError(`Missing env var SENTRY_DSN: Sentry needs a DSN to be initialised.`)
 	}
