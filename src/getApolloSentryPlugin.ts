@@ -1,5 +1,6 @@
 import * as Sentry from "@sentry/node"
-// import * as Tracing from "@sentry/tracing"
+import * as Tracing from "@sentry/tracing"
+import { TransactionContext } from "@sentry/types"
 import { ApolloServerPlugin, GraphQLRequestContext } from 'apollo-server-plugin-base'
 
 import { initSentry } from "./initSentry"
@@ -13,14 +14,20 @@ export function getApolloSentryPlugin(name: String = 'Server', timeout: number =
 			initSentry()
 		},
 	
-		async requestDidStart() {
+		async requestDidStart(requestContext: GraphQLRequestContext) {
 	
+			const txContext: TransactionContext = {
+				op: requestContext.request.operationName,
+				name: requestContext.request.operationName || '',
+				data: requestContext.request.variables
+			}
+			const transaction = Sentry.startTransaction(txContext)
 			// console.log('Request started!')
 	
 			return {
-				// async parsingDidStart(requestContext) {},
-	
-				// async validationDidStart(requestContext) {},
+				async willSendResponse(requestContext) {
+					transaction.finish()
+				},
 	
 				async didEncounterErrors(requestContext: GraphQLRequestContext){
 					// Iterate over the errors found and capture each.
