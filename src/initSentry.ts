@@ -12,6 +12,9 @@ export function validateEnv(){
 	if(typeof process.env.SENTRY_TRACES_SAMPLE_RATE == 'undefined') {
 		console.warn(`Missing env var SENTRY_TRACES_SAMPLE_RATE: Will use default ${defaultTracesSampleRate}.`)
 	}
+	else{
+		console.log(`Env var SENTRY_TRACES_SAMPLE_RATE: %s`, process.env.SENTRY_TRACES_SAMPLE_RATE)
+	}
 }
 
 export function initSentry(): void{
