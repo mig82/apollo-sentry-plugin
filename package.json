@@ -1,6 +1,6 @@
 {
   "name": "apollo-sentry-plugin",
-  "version": "1.0.0-rc10",
+  "version": "1.0.0",
   "description": "A Sentry plugin for Apollo Server.",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,8 +13,10 @@
   },
   "keywords": [
     "sentry",
+	"apollo",
     "apollo-server",
-    "graphql"
+    "graphql",
+	"plugin"
   ],
   "author": "Miguelángel Fernández",
   "license": "MIT",
