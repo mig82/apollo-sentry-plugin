@@ -1,10 +1,10 @@
 {
-	"include": [
-		"src/**/*.ts"
-	  ],
-	  "exclude": [
-		"tests/**/*.spec.ts"
-	  ],
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "tests/**/*.spec.ts"
+  ],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 

@@ -35,7 +35,6 @@ export function getApolloSentryPlugin(name: String = 'Server', timeout: number =
 			return {
 				async willSendResponse(ctx) {
 					transaction.finish()
-					console.log(`trasaction sent`)
 					await Sentry.flush(timeout)
 				},
 

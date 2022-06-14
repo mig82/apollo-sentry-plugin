@@ -2,12 +2,16 @@ import * as Sentry from "@sentry/node"
 import {ApolloSentryPluginError} from './ApolloSentryPluginError'
 
 const defaultTracesSampleRate = 0.1
+const sentryDsnRegex = /https:\/\/[0-9a-f]{32}@[a-z][0-9]{7}\.ingest\.sentry\.io\/[0-9]{7}/gmi;
 
 export function validateEnv(){
-	if(typeof process.env.SENTRY_DSN == 'undefined') {
+	if(typeof process.env.SENTRY_DSN === 'undefined') {
 		throw new ApolloSentryPluginError(`Missing env var SENTRY_DSN: Sentry needs a DSN to be initialised.`)
 	}
-	console.log(`SENTRY_DSN set to %s`, process.env.SENTRY_DSN)
+	else if(!sentryDsnRegex.test(process.env.SENTRY_DSN)){
+		throw new ApolloSentryPluginError(`Env var SENTRY_DSN does not look like a valid Sentry DSN URL: '${process.env.SENTRY_DSN}'`)
+	}
+	console.log(`SENTRY_DSN set to '%s'`, process.env.SENTRY_DSN)
 
 	if(typeof process.env.SENTRY_TRACES_SAMPLE_RATE == 'undefined') {
 		console.warn(`Missing env var SENTRY_TRACES_SAMPLE_RATE: Will use default ${defaultTracesSampleRate}.`)
