@@ -1,10 +1,11 @@
 {
   "name": "apollo-sentry-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Sentry plugin for Apollo Server.",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
+	"build": "tsc",
     "test": "npx ts-mocha -p tsconfig.json tests/**/*.spec.ts"
   },
   "repository": {
