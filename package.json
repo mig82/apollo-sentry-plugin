@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-	"build": "tsc",
+    "build": "tsc",
     "test": "npx ts-mocha -p tsconfig.json tests/**/*.spec.ts"
   },
   "repository": {
@@ -14,10 +14,10 @@
   },
   "keywords": [
     "sentry",
-	"apollo",
+    "apollo",
     "apollo-server",
     "graphql",
-	"plugin"
+    "plugin"
   ],
   "author": "Miguelángel Fernández",
   "license": "MIT",
